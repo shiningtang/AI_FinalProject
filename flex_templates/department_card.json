@@ -1,0 +1,142 @@
+{
+  "type": "bubble",
+  "body": {
+    "type": "box",
+    "layout": "vertical",
+    "contents": [
+      {
+        "type": "text",
+        "text": "系所資訊",
+        "weight": "bold",
+        "size": "lg"
+      },
+      {
+        "type": "text",
+        "text": "{school}",
+        "size": "md"
+      },
+      {
+        "type": "text",
+        "text": "{department}・{program}",
+        "size": "sm",
+        "wrap": true
+      },
+      {
+        "type": "separator",
+        "margin": "md"
+      },
+      {
+        "type": "box",
+        "layout": "vertical",
+        "margin": "md",
+        "spacing": "sm",
+        "contents": [
+          {
+            "type": "box",
+            "layout": "baseline",
+            "contents": [
+              {
+                "type": "text",
+                "text": "學位",
+                "size": "sm",
+                "color": "#aaaaaa",
+                "flex": 2
+              },
+              {
+                "type": "text",
+                "text": "{degree}",
+                "size": "sm",
+                "wrap": true,
+                "flex": 5
+              }
+            ]
+          },
+          {
+            "type": "box",
+            "layout": "baseline",
+            "contents": [
+              {
+                "type": "text",
+                "text": "截止",
+                "size": "sm",
+                "color": "#aaaaaa",
+                "flex": 2
+              },
+              {
+                "type": "text",
+                "text": "{deadline}",
+                "size": "sm",
+                "wrap": true,
+                "flex": 5
+              }
+            ]
+          },
+          {
+            "type": "box",
+            "layout": "baseline",
+            "contents": [
+              {
+                "type": "text",
+                "text": "英文",
+                "size": "sm",
+                "color": "#aaaaaa",
+                "flex": 2
+              },
+              {
+                "type": "text",
+                "text": "{english_required}",
+                "size": "sm",
+                "wrap": true,
+                "flex": 5
+              }
+            ]
+          },
+          {
+            "type": "box",
+            "layout": "baseline",
+            "contents": [
+              {
+                "type": "text",
+                "text": "GPA",
+                "size": "sm",
+                "color": "#aaaaaa",
+                "flex": 2
+              },
+              {
+                "type": "text",
+                "text": "{gpa_min}",
+                "size": "sm",
+                "wrap": true,
+                "flex": 5
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "button",
+        "style": "link",
+        "height": "sm",
+        "action": {
+          "type": "uri",
+          "label": "官方頁面",
+          "uri": "{contact_url}"
+        }
+      }
+    ]
+  },
+  "footer": {
+    "type": "box",
+    "layout": "vertical",
+    "spacing": "sm",
+    "contents": [
+      {
+        "type": "text",
+        "text": "{notes}",
+        "size": "xs",
+        "color": "#aaaaaa",
+        "wrap": true
+      }
+    ]
+  }
+}
