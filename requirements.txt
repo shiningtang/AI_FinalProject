@@ -5,3 +5,9 @@ python-dotenv==1.0.1
 pydantic==2.9.2
 requests==2.31.0
 pandas==2.2.2
+weaviate-client
+openai
+uvicorn[standard]
+tqdm
+python-docx  # 若需要產出 Word
+
