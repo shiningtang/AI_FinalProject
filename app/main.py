@@ -1,9 +1,51 @@
+# app/main.py
+from __future__ import annotations
+import json
+from fastapi import FastAPI, Request, HTTPException
+from fastapi.responses import JSONResponse
+from linebot import LineBotApi, WebhookHandler
+from linebot.exceptions import InvalidSignatureError
+from linebot.models import (
+    MessageEvent, TextMessage, TextSendMessage, FlexSendMessage,
+    PostbackEvent, QuickReply, QuickReplyButton, PostbackAction,
+)
+
+from .config import get_settings
+from .data import load_dataframe, parse_query, filter_rows
+from .flex import build_department_bubble
+
 # 在檔案頂部 imports 區加：
 import os
 import requests
 import threading
 from dotenv import load_dotenv
 load_dotenv()
+
+
+
+settings = get_settings()
+app = FastAPI(title="LINE Grad Admissions Bot")
+
+line_bot_api = LineBotApi(settings.line_channel_access_token)
+handler = WebhookHandler(settings.line_channel_secret)
+
+@app.get("/healthz")
+def healthz():
+    return {"ok": True}
+
+@app.get("/callback")  # for LINE verify
+def callback_verify():
+    return {"ok": True}
+
+@app.post("/callback")
+async def callback(request: Request):
+    signature = request.headers.get("X-Line-Signature", "")
+    body_text = (await request.body()).decode("utf-8")
+    try:
+        handler.handle(body_text, signature)
+    except InvalidSignatureError:
+        raise HTTPException(status_code=400, detail="Invalid signature")
+    return JSONResponse({"status": "ok"})
 
 # ... 你既有的 imports 保留 ...
 # 後面在 settings 取得或直接用 env
