@@ -197,8 +197,10 @@ class SupabaseVectorStore:
         try:
             with conn.cursor(cursor_factory=RealDictCursor) as cur:
                 vec_literal = "'[" + ",".join(map(str, q_emb)) + "]'::vector"
+                # [修正 1: SQL SELECT 中加入所有遺漏的欄位]
                 sql = f"""
-                SELECT id, school, college, department, track, deadline, docs_required, link_apply, note,
+                SELECT id, school, college, department, track, deadline, quota, assessment_weights, other_req,
+                       docs_required, link_apply, note,
                        interview_required, written_exam_required,
                        embedding <-> {vec_literal} AS distance
                 FROM {self.table}
@@ -210,21 +212,29 @@ class SupabaseVectorStore:
                 rows = cur.fetchall()
                 results = []
                 for r in rows:
+                    # [修正 2: metadata 字典中加入所有遺漏的欄位]
                     meta = {
                         "school": r.get("school"),
                         "college": r.get("college"),
                         "department": r.get("department"),
                         "track": r.get("track"),
                         "deadline": r.get("deadline"),
+                        "quota": r.get("quota"),                       # <-- 新增
+                        "assessment_weights": r.get("assessment_weights"), # <-- 新增
+                        "other_req": r.get("other_req"),               # <-- 新增
+                        "docs_required": r.get("docs_required"),
                         "link_apply": r.get("link_apply"),
+                        "note": r.get("note"),
                         "interview_required": r.get("interview_required"),
                         "written_exam_required": r.get("written_exam_required")
                     }
+                    # [修正 3: 'text' 欄位應傳遞給 RAG，這裡暫時使用 note，但建議在 upsert 時儲存 text 內容]
+                    # 註: 如果您的資料庫中沒有 'text' 欄位，RAG 框架通常使用 note 或組合後的摘要。
                     results.append({
                         "id": r.get("id"),
                         "score": float(r.get("distance")) if r.get("distance") is not None else None,
                         "metadata": meta,
-                        "text": r.get("note") or ""
+                        "text": r.get("note") or "" # 假設 note 欄位包含主要內容
                     })
                 return results
         finally:
